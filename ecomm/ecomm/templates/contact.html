@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<!--Main layout-->
+<main class="mt-5">
+    <div class="container">
+        <!-- Heading -->
+        <h2 class="my-5 text-center">Kontak</h2>
+
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!--Card-->
+                <div class="card p-4">
+                    <form action="{% url 'toko:contact' %}" method="post">
+
+                        {% csrf_token %}
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="name">Nama</label>
+                            <input type="text" id="name" name="name" class="form-control form-control-lg" required>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control form-control-lg" required>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="phone">Nomor Telepon</label>
+                            <input type="tel" id="phone" name="phone" class="form-control form-control-lg" required>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="message">Pesan</label>
+                            <textarea id="message" name="message" class="form-control form-control-lg" rows="4" required></textarea>
+                        </div>
+
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Kirim</button>
+                    </form>
+                </div>
+                <!--/.Card-->
+            </div>
+        </div>
+    </div>
+</main>
+<!--Main layout-->
+{% endblock content %}

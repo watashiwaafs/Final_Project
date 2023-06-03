@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col pt-5 pb-5">
+            <h1 class="text-center">Total Belanja Anda</h1>
+            <table class="table align-middle mb-0 bg-white">
+                <thead class="bg-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Quantity</th>
+                        <th>Total Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for belanjaan in order.produk_items.all %}
+                    <tr>
+                        <td scope="row">
+                            {{ forloop.counter }}
+                        </td>
+                        <td>
+                            <strong>{{ belanjaan.quantity }} x {{ belanjaan.produk_item.nama_produk }}</strong>
+                            <br>
+                            <small>{{ belanjaan.produk_item.deskripsi|truncatechars:50 }}</small>
+                        </td>
+                        <td>
+                            {% if belanjaan.produk_item.harga_diskon %}
+                            <strong>${{ belanjaan.get_total_harga_diskon_item }}</strong>
+                            {% else %}
+                            <strong>${{ belanjaan.get_total_harga_item }}</strong>
+                            {% endif %}
+                        </td>
+                        <td>{{ belanjaan.quantity }}</td>
+                        <td>
+                            {% if belanjaan.produk_item.harga_diskon %}
+                            ${{ belanjaan.get_total_harga_diskon_item }}
+                            {% else %}
+                            ${{ belanjaan.get_total_harga_item }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">Keranjang belanja kosong</td>
+                    </tr>
+                    {% endfor %}
+
+                    {% if order.get_total_harga_order %}
+                    <tr>
+                        <td colspan="4"><b>Total Belanja</b></td>
+                        <td><b>${{ order.get_total_harga_order }}</b></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">Keranjang belanja kosong</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            <br>
+            <div class="text-center">
+                {% if is_paypal %}
+                <div>{{ paypalform.render }}</div>
+                {% else %}
+                <div>Pembayaran Stripe belum diaktifkan, gunakan Paypal</div>
+                <a href="{% url 'toko:payment' 'paypal' %}" class="btn btn-info">Paypal</a>
+                {% endif %}
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock content %}
