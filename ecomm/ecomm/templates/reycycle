@@ -48,7 +48,7 @@
 
                     </ul>
 
-                    
+                    <
                     {% regroup produk_list by kategori as kategori_list %}
     
                     {% for kategori in kategori_list %}
