@@ -11,7 +11,9 @@ from django.views.generic import TemplateView
 from .forms import CheckoutForm, ContactForm
 from .models import ProdukItem, OrderProdukItem, Order, AlamatPengiriman, Payment, Contact
 from django.core.mail import send_mail
-
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 
 
 
@@ -28,10 +30,20 @@ class HomeListView(generic.ListView):
             queryset = ProdukItem.objects.all().order_by('kategori')
         return queryset
   
-
-class ProductDetailView(generic.DetailView):
+@method_decorator(ensure_csrf_cookie, name='dispatch')
+class ProductDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = 'product_detail.html'
-    queryset = ProdukItem.objects.all()
+    model = ProdukItem
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(self.model, slug=self.kwargs['slug'])
+        return obj
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.is_accessible_by_user(request.user):
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
 
 class CheckoutView(LoginRequiredMixin, generic.FormView):
     def get(self, *args, **kwargs):

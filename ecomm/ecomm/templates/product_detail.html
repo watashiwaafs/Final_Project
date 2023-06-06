@@ -54,10 +54,14 @@
                         Tambah ke keranjang
                         <i class="fas fa-shopping-cart ms-1"></i>
                     </a>
-                    <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger ms-1" >
-                        Kurangi keranjang
-                        <i class="fas fa-shopping-cart ms-1"></i>
-                    </a>
+                    <form action="{{ object.get_remove_from_cart_url }}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger ms-1">
+                            Kurangi keranjang
+                            <i class="fas fa-shopping-cart ms-1"></i>
+                        </button>
+                    </form>
+                    
                 </div>
                 <!--Content-->
             </div>
@@ -70,29 +74,52 @@
         <!--Grid row-->
         <div class="row d-flex justify-content-center">
            <!--Additional information-->
-            <div class="mt-4">
-                <h5>Additional information</h5>
-                <ul class="list-group list-group-flush">
-                   
-                    <li class="list-group-item">
-                        <span class="fw-bold">Produk Lainnya:</span>
-                        <div class="row related-products">
-                            {% for product in object.get_related_products %}
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <img src="{{ product.gambar.url }}" alt="{{ product.nama_produk }}" class="card-img-top">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ product.nama_produk }}</h5>
-                                        <p class="card-text">${{ product.harga }}</p>
-                                        <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Details</a>
-                                    </div>
-                                </div>
+           <!--Grid row-->
+<div class="row d-flex justify-content-center">
+    <!--Additional information-->
+    <div class="row d-flex justify-content-center">
+        <!--Additional information-->
+         <div class="mt-4">
+             <h5>Additional information</h5>
+             <ul class="list-group list-group-flush">
+                 <li class="list-group-item">
+                     <span class="fw-bold">Merk:</span>
+                     <input type="text" class="form-control" value="{{ object.merk }}" readonly>
+                 </li>
+                 <li class="list-group-item">
+                     <span class="fw-bold">Bahan:</span>
+                     <input type="text" class="form-control" value="{{ object.bahan }}" readonly>
+                 </li>
+                 <li class="list-group-item">
+                     <span class="fw-bold">Jumlah Stok:</span>
+                     <input type="text" class="form-control" value="{{ object.jumlah_stok }}" readonly>
+                 </li>
+             </ul>
+         </div>
+    <!--Additional information-->
+</div>
+<!--Grid row-->
+
+        <div class="mt-4">
+            <h5>Produk Lainnya:</h5>
+            <li class="list-group-item">
+                <div class="row related-products">
+                    {% for product in object.get_related_products %}
+                    <div class="col-md-3">
+                        <div class="card">
+                            <img src="{{ product.gambar.url }}" alt="{{ product.nama_produk }}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.nama_produk }}</h5>
+                                <p class="card-text">${{ product.harga }}</p>
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Details</a>
                             </div>
-                            {% endfor %}
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </li>
+        </div>
+
 <!--Additional information-->
 
 

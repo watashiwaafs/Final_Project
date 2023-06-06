@@ -51,7 +51,7 @@ class ProdukItem(models.Model):
             })
             
     def get_related_products(self):
-        return ProdukItem.objects.exclude(id=self.id)[:3]
+        return ProdukItem.objects.exclude(id=self.id)[:4]
 
     
 class OrderProdukItem(models.Model):
